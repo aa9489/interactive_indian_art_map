@@ -1,0 +1,512 @@
+/* ============================================================
+   Interactive Art Map of India — Stylesheet
+   Palette: ivory ground, deep maroon, turmeric gold, indigo,
+   terracotta — drawn from Indian textile & miniature painting.
+   ============================================================ */
+
+:root{
+  --ivory: #f6ecd9;
+  --paper: #fbf5e9;
+  --ink: #2a1a14;
+  --maroon: #7a1f2b;
+  --maroon-dark: #5a141d;
+  --gold: #c99a3c;
+  --gold-light: #e6c874;
+  --indigo: #223a5e;
+  --terracotta: #c1502e;
+  --line: rgba(42,26,20,0.16);
+  --shadow: 0 10px 30px rgba(42,26,20,0.18);
+  --radius: 6px;
+  --serif: "Rozha One", "Georgia", serif;
+  --body: "Mukta", "Segoe UI", sans-serif;
+}
+
+*{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; }
+
+body{
+  margin:0;
+  font-family: var(--body);
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 20% 10%, rgba(201,154,60,0.08), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(122,31,43,0.06), transparent 45%),
+    var(--paper);
+  background-attachment: fixed;
+  line-height: 1.55;
+}
+
+/* subtle block-print dot texture */
+body::before{
+  content:"";
+  position: fixed; inset:0;
+  background-image: radial-gradient(var(--line) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  opacity:.35;
+  pointer-events:none;
+  z-index:0;
+}
+
+a{ color: inherit; }
+
+.wrap{ max-width: 1280px; margin: 0 auto; padding: 0 28px; position:relative; z-index:1; }
+
+/* ---------- decorative border strip ---------- */
+.jaali-strip{
+  height: 14px;
+  background-repeat: repeat-x;
+  background-size: 28px 14px;
+  background-image: linear-gradient(45deg, var(--gold) 25%, transparent 25%),
+                     linear-gradient(-45deg, var(--gold) 25%, transparent 25%);
+  opacity:.85;
+}
+.jaali-strip.bottom{ transform: scaleY(-1); }
+
+/* ---------- header ---------- */
+header.hero{
+  position: relative;
+  background: var(--maroon);
+  color: var(--ivory);
+  overflow:hidden;
+}
+header.hero::after{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 12% 30%, rgba(230,200,116,0.18), transparent 35%),
+    radial-gradient(circle at 85% 70%, rgba(230,200,116,0.14), transparent 40%);
+  pointer-events:none;
+}
+.hero-inner{
+  position:relative;
+  padding: 54px 0 40px;
+  text-align:center;
+}
+.eyebrow-mark{
+  display:inline-block;
+  font-family: var(--body);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--gold-light);
+  margin-bottom: 10px;
+}
+.hero-inner h1{
+  font-family: var(--serif);
+  font-weight:400;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  margin: 0 0 12px;
+  letter-spacing: .01em;
+}
+.hero-inner p.sub{
+  max-width: 640px;
+  margin: 0 auto;
+  color: rgba(246,236,217,0.86);
+  font-size: 1.05rem;
+}
+
+/* search */
+.search-row{
+  margin: 28px auto 6px;
+  max-width: 560px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.search-row input[type="text"]{
+  flex:1;
+  padding: 13px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(230,200,116,0.5);
+  background: rgba(255,255,255,0.08);
+  color: var(--ivory);
+  font-family: var(--body);
+  font-size: 1rem;
+  outline:none;
+  transition: background .2s, border-color .2s;
+}
+.search-row input[type="text"]::placeholder{ color: rgba(246,236,217,0.55); }
+.search-row input[type="text"]:focus{
+  background: rgba(255,255,255,0.14);
+  border-color: var(--gold-light);
+}
+
+.state-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin: 18px auto 0;
+  max-width: 900px;
+}
+.chip{
+  border: 1px solid rgba(230,200,116,0.45);
+  background: transparent;
+  color: var(--gold-light);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: var(--body);
+  font-size: 0.85rem;
+  cursor:pointer;
+  transition: all .18s ease;
+}
+.chip:hover{ background: rgba(230,200,116,0.15); }
+.chip.active{
+  background: var(--gold-light);
+  color: var(--maroon-dark);
+  border-color: var(--gold-light);
+  font-weight:600;
+}
+
+/* ---------- main layout ---------- */
+main{ padding: 44px 0 20px; }
+
+.section-title{
+  font-family: var(--serif);
+  font-weight:400;
+  font-size: 1.7rem;
+  color: var(--maroon);
+  margin: 0 0 6px;
+}
+.section-kicker{
+  font-size: 0.9rem;
+  color: var(--indigo);
+  margin: 0 0 26px;
+  opacity:.85;
+}
+
+.explorer{
+  display:grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 26px;
+  align-items: start;
+}
+@media (max-width: 900px){
+  .explorer{ grid-template-columns: 1fr; }
+}
+
+.frame{
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  position:relative;
+}
+.frame-inner-border{
+  position:absolute; inset:8px;
+  border: 1.5px solid var(--gold);
+  border-radius: 4px;
+  pointer-events:none;
+  z-index: 450;
+}
+
+#map{
+  height: 560px;
+  border-radius: var(--radius);
+  filter: sepia(6%) saturate(1.05);
+}
+@media (max-width:600px){ #map{ height: 420px; } }
+
+.map-hint{
+  font-size: 0.82rem;
+  color: var(--ink);
+  opacity:.65;
+  padding: 10px 16px;
+  text-align:center;
+}
+
+/* ---------- info panel ---------- */
+.info-panel{
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  padding: 26px;
+  min-height: 560px;
+  display:flex;
+  flex-direction:column;
+}
+
+.info-empty{
+  margin:auto;
+  text-align:center;
+  color: var(--ink);
+  opacity:.6;
+  padding: 30px 10px;
+}
+.info-empty svg{ width:64px; height:64px; opacity:.5; margin-bottom:12px; }
+
+.info-motif{
+  width:100%;
+  aspect-ratio: 16/9;
+  border-radius: 4px;
+  overflow:hidden;
+  border: 1px solid var(--line);
+  margin-bottom: 18px;
+}
+.info-motif svg{ width:100%; height:100%; display:block; }
+
+.info-tag{
+  display:inline-block;
+  font-size: 0.78rem;
+  letter-spacing:.03em;
+  color: var(--maroon);
+  background: rgba(122,31,43,0.08);
+  border: 1px solid rgba(122,31,43,0.2);
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+  width: fit-content;
+}
+.info-panel h2{
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.8rem;
+  margin: 0 0 2px;
+  color: var(--maroon);
+}
+.info-panel .state-line{
+  color: var(--indigo);
+  font-size: 0.95rem;
+  margin-bottom: 16px;
+  font-weight:600;
+}
+.info-panel h3{
+  font-family: var(--body);
+  font-size: 0.85rem;
+  letter-spacing:.03em;
+  color: var(--terracotta);
+  margin: 16px 0 6px;
+}
+.info-panel p{ margin: 0 0 4px; font-size: 0.98rem; }
+.info-panel ul{ margin: 4px 0 0; padding-left: 18px; }
+.info-panel li{ margin-bottom: 4px; }
+
+/* ---------- gallery ---------- */
+.gallery{
+  margin-top: 56px;
+}
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.art-card{
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow:hidden;
+  cursor:pointer;
+  box-shadow: 0 4px 14px rgba(42,26,20,0.08);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  display:flex;
+  flex-direction:column;
+}
+.art-card:hover, .art-card:focus-visible{
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(42,26,20,0.18);
+  border-color: var(--gold);
+  outline:none;
+}
+.art-card.hidden{ display:none; }
+.art-card.selected{ border-color: var(--maroon); box-shadow: 0 0 0 2px var(--maroon) inset, 0 14px 30px rgba(42,26,20,0.18); }
+
+.art-thumb{ width:100%; aspect-ratio: 4/3; }
+.art-thumb svg{ width:100%; height:100%; display:block; }
+
+.art-card-body{ padding: 14px 16px 16px; }
+.art-card-body h4{
+  font-family: var(--serif);
+  font-weight:400;
+  font-size: 1.15rem;
+  margin: 0 0 2px;
+  color: var(--maroon);
+}
+.art-card-body .state{
+  font-size: 0.82rem;
+  color: var(--indigo);
+  font-weight:600;
+}
+
+.no-results{
+  text-align:center;
+  padding: 40px 20px;
+  color: var(--ink);
+  opacity:.6;
+  font-style: italic;
+  grid-column: 1/-1;
+}
+
+/* ---------- leaflet marker override ---------- */
+.art-marker{
+  background: var(--maroon);
+  border: 2px solid var(--gold-light);
+  border-radius: 50%;
+  width: 16px; height:16px;
+  box-shadow: 0 0 0 4px rgba(122,31,43,0.18);
+}
+.art-marker.active{
+  background: var(--terracotta);
+  width:20px; height:20px;
+}
+.leaflet-popup-content-wrapper{
+  border-radius: 4px;
+  font-family: var(--body);
+}
+.leaflet-popup-content-wrapper b{ font-family: var(--serif); font-weight:400; color: var(--maroon); }
+
+/* Clean vector-only map: no external raster tiles, so there are no 403/blocked tiles. */
+#map .leaflet-container{
+  background:
+    radial-gradient(circle at 20% 20%, rgba(122,31,43,.045) 1px, transparent 1.5px) 0 0/24px 24px,
+    linear-gradient(135deg,#f4ecd9,#e9dfc8);
+}
+#map .leaflet-control-zoom{
+  border:1px solid rgba(90,20,29,.25)!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+#map .leaflet-control-zoom a{
+  color:var(--maroon);
+  background:#fffaf0;
+}
+#map .leaflet-control-zoom a:hover{background:#f3e5c5;}
+.leaflet-tooltip.india-state-tooltip{
+  background:#5a141d;
+  color:#fff8e8;
+  border:0;
+  box-shadow:0 5px 14px rgba(0,0,0,.18);
+  font-weight:600;
+}
+.leaflet-tooltip.india-state-tooltip:before{border-top-color:#5a141d;}
+
+/* ---------- footer ---------- */
+footer{
+  margin-top: 60px;
+  background: var(--maroon-dark);
+  color: rgba(246,236,217,0.75);
+  text-align:center;
+  padding: 26px 0;
+  font-size: 0.88rem;
+}
+footer strong{ color: var(--gold-light); font-weight:600; }
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *{ transition: none !important; scroll-behavior:auto !important; }
+}
+
+/* focus visibility */
+button:focus-visible, input:focus-visible, .art-card:focus-visible{
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* ---------- team credits ---------- */
+.team-credits{
+  max-width: 980px;
+  margin: 22px auto 0;
+  padding: 15px 20px 17px;
+  border-top: 1px solid rgba(230,200,116,.42);
+  border-bottom: 1px solid rgba(230,200,116,.42);
+  background: rgba(0,0,0,.08);
+  border-radius: 10px;
+}
+.team-credits .credit-title{
+  font-size:.72rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--gold-light);
+  margin-bottom:10px;
+  font-weight:700;
+}
+.team-credits .members{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px 18px;
+}
+.team-credits .members span{
+  color:rgba(246,236,217,.92);
+  font-size:.82rem;
+  white-space:nowrap;
+}
+.team-credits .members b{ color:var(--gold-light); }
+
+@media(max-width:650px){
+  .team-credits .members{display:block}
+  .team-credits .members span{display:block;margin:6px 0}
+}
+
+/* ---------- real India state map ---------- */
+#map{
+  height:560px;
+  border-radius:var(--radius);
+  filter:none;
+  background:#e8dfc9;
+  overflow:hidden;
+}
+.map-status{
+  position:absolute;
+  z-index:800;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  padding:10px 16px;
+  border-radius:999px;
+  background:rgba(90,20,29,.92);
+  color:#fff8e8;
+  font-size:.82rem;
+  box-shadow:0 8px 22px rgba(0,0,0,.18);
+  pointer-events:none;
+}
+.map-status.ready{display:none}
+.map-status.error{
+  background:#8b2e1f;
+}
+.map-legend{
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+  padding:9px 12px 2px;
+  font-size:.76rem;
+  color:var(--ink);
+  opacity:.78;
+}
+.map-legend span{display:inline-flex;align-items:center;gap:6px}
+.legend-state,.legend-art{
+  width:13px;height:13px;display:inline-block;border-radius:3px;
+}
+.legend-state{border:2px solid var(--maroon);background:rgba(230,200,116,.28)}
+.legend-art{border-radius:50%;background:var(--terracotta);border:2px solid #fff}
+
+.india-state{
+  fill:#ead9a9;
+  fill-opacity:.72;
+  stroke:#7a1f2b;
+  stroke-width:1.15;
+  vector-effect:non-scaling-stroke;
+  transition:fill .18s,fill-opacity .18s,stroke-width .18s;
+}
+.india-state:hover,
+.india-state.active{
+  fill:#e6c874;
+  fill-opacity:.96;
+  stroke:#5a141d;
+  stroke-width:2;
+}
+.state-label{
+  font-family:var(--body);
+  font-size:11px;
+  font-weight:700;
+  fill:#5a141d;
+  paint-order:stroke;
+  stroke:#fbf5e9;
+  stroke-width:3px;
+  stroke-linejoin:round;
+  pointer-events:none;
+}
+.leaflet-control-attribution{
+  font-size:9px!important;
+}

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Interactive Art Map of India</title>
+
+<meta name="description"
+      content="An interactive map exploring ten regional Indian art forms — history, characteristics and origin.">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Rozha+One&family=Mukta:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+
+<!-- Leaflet CSS -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""
+>
+
+<!-- Main CSS -->
+<link rel="stylesheet" href="styles.css">
+
+
+<!-- =====================================================
+     TEAM MEMBER LAYOUT
+     3 MEMBERS FIRST ROW
+     2 MEMBERS SECOND ROW
+     ===================================================== -->
+
+<style>
+
+.team-credits .members {
+    display: grid;
+
+    /* Exactly 3 columns */
+    grid-template-columns: repeat(3, max-content);
+
+    justify-content: center;
+
+    column-gap: 28px;
+    row-gap: 10px;
+
+    margin: 0 auto;
+}
+
+.team-credits .members span {
+    white-space: nowrap;
+    text-align: center;
+}
+
+
+/* ==============================
+   MOBILE RESPONSIVE
+   ============================== */
+
+@media (max-width: 850px) {
+
+    .team-credits .members {
+        grid-template-columns: repeat(2, max-content);
+        column-gap: 20px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .team-credits .members {
+        grid-template-columns: 1fr;
+        row-gap: 8px;
+    }
+
+    .team-credits .members span {
+        white-space: normal;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HERO / HEADER
+     ===================================================== -->
+
+<header class="hero">
+
+    <div class="jaali-strip"></div>
+
+
+    <div class="wrap hero-inner">
+
+
+        <!-- Hindi heading -->
+
+        <span class="eyebrow-mark">
+            भारत की कला यात्रा
+        </span>
+
+
+        <!-- Main title -->
+
+        <h1>
+            Interactive Art Map of India
+        </h1>
+
+
+        <!-- Description -->
+
+        <p class="sub">
+            Travel across ten states through their signature art traditions —
+            click a marker or a card to uncover its story, technique and
+            characteristic style.
+        </p>
+
+
+        <!-- =================================================
+             CREATED BY
+             ================================================= -->
+
+        <div
+            class="team-credits"
+            aria-label="Created by"
+        >
+
+            <div class="credit-title">
+                Created by
+            </div>
+
+
+            <div class="members">
+
+                <!-- ROW 1 -->
+
+                <span>
+                    Nehal Agarwal
+                    <b>·</b>
+                    RA2411003011381
+                </span>
+
+
+                <span>
+                    Ashish A
+                    <b>·</b>
+                    RA2411003011388
+                </span>
+
+
+                <span>
+                    Vishnu Ramachandiran
+                    <b>·</b>
+                    RA2411003011389
+                </span>
+
+
+                <!-- ROW 2 -->
+
+                <span>
+                    Shashwat Singh
+                    <b>·</b>
+                    RA2411003011391
+                </span>
+
+
+                <span>
+                    Shiva Karthikeyan
+                    <b>·</b>
+                    RA2411003011397
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SEARCH
+             ================================================= -->
+
+        <div class="search-row">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by art form or state — e.g. Warli, Kerala..."
+                aria-label="Search art forms"
+            >
+
+        </div>
+
+
+        <!-- STATE FILTER CHIPS -->
+
+        <div
+            class="state-chips"
+            id="stateChips"
+        ></div>
+
+
+    </div>
+
+
+    <div class="jaali-strip bottom"></div>
+
+</header>
+
+
+
+<!-- =====================================================
+     MAIN CONTENT
+     ================================================= -->
+
+<main class="wrap">
+
+
+    <!-- =================================================
+         MAP SECTION
+         ================================================= -->
+
+    <section class="explore">
+
+
+        <h2 class="section-title">
+            Explore the Map
+        </h2>
+
+
+        <p class="section-kicker">
+            Click any marker to reveal that region's art form.
+        </p>
+
+
+
+        <div class="explorer">
+
+
+            <!-- ============================
+                 MAP
+                 ============================ -->
+
+            <div class="frame">
+
+
+                <div id="map">
+
+                    <div
+                        class="map-status"
+                        id="mapStatus"
+                    >
+                        Loading India state map…
+                    </div>
+
+                </div>
+
+
+                <!-- MAP LEGEND -->
+
+                <div class="map-legend">
+
+
+                    <span>
+
+                        <i class="legend-state"></i>
+
+                        State boundary
+
+                    </span>
+
+
+                    <span>
+
+                        <i class="legend-art"></i>
+
+                        Art form
+
+                    </span>
+
+
+                </div>
+
+
+                <!-- MAP HINT -->
+
+                <div class="map-hint">
+
+                    Scroll to zoom · drag to pan ·
+                    click an art marker or a state
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 INFORMATION PANEL
+                 ================================================= -->
+
+            <div
+                class="info-panel"
+                id="infoPanel"
+            >
+
+
+                <div class="info-empty">
+
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                    >
+
+                        <path
+                            d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"
+                        />
+
+                        <circle
+                            cx="12"
+                            cy="10"
+                            r="2.5"
+                        />
+
+                    </svg>
+
+
+                    <p>
+
+                        Select an art form on the map or from
+                        the gallery below to see its history
+                        and characteristics here.
+
+                    </p>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         ART GALLERY
+         ================================================= -->
+
+    <section class="gallery">
+
+
+        <h2 class="section-title">
+            All Art Forms
+        </h2>
+
+
+        <p class="section-kicker">
+
+            Ten traditions, ten states —
+            filter by name or state above.
+
+        </p>
+
+
+        <div
+            class="grid"
+            id="galleryGrid"
+        ></div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer>
+
+    <div class="wrap">
+
+        Interactive Art Map of India —
+        a college project celebrating
+        <strong>
+            10 regional Indian art traditions
+        </strong>.
+
+        <br>
+
+        State boundary data is used for educational
+        visualization · Motif illustrations are original
+        stylized renderings.
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     LEAFLET JS
+     ===================================================== -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+></script>
+
+
+<!-- =====================================================
+     PROJECT JAVASCRIPT FILES
+     ===================================================== -->
+
+<script src="data.js"></script>
+
+<script src="motifs.js"></script>
+
+<script src="app.js"></script>
+
+
+</body>
+</html>
